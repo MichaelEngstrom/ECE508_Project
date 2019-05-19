@@ -75,8 +75,8 @@ class ScriptRunner:
         self.completed = tk.StringVar() # To update numcomp_label
         self.numcomp_label = tk.Label(self.comptests_frame, \
                                       textvariable=self.completed)
-        self.numcomp_label.pack(side=tk.LEFT)
         self.testcomp_label.pack(side=tk.LEFT)
+        self.numcomp_label.pack(side=tk.LEFT)
 
         # Pack the frames
         self.button_frame.pack()
@@ -113,17 +113,24 @@ class ScriptRunner:
 
     # The run_test method is the callback function for the runtest_button widget
     def run_test(self):
+        completed_count = 0
         #run the tests
         for script in scripts_list:
+            # Make unique folder for today's date
             mydir = dt.now().strftime('%Y-%m-%d')
-            if not os.path.exists(mydir):   # Create directory if not already created
+            # Create directory if not already created
+            if not os.path.exists(mydir):
                 os.makedirs(mydir)
+            # Make index for naming output files to match test numbers
             test_index = scripts_list.index(script) + 1
             test_num = '/test' + str(test_index) + ".txt"
             mycmd = os.path.join(script) + " >> " + mydir + test_num
-            print(mycmd)
+            # Call the script
             os.system(mycmd)
-            #print(script)
+
+            # Update Completed Tests count
+            completed_count += 1
+            self.completed.set(str(completed_count))
 
     # Method to update text box
     def update_text_box(self):
