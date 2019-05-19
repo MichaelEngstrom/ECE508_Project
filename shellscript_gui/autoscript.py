@@ -11,7 +11,6 @@
     Developed using Python 3.5"""
 
 import tkinter as tk
-import subprocess
 import os
 from tkinter import filedialog
 from tkinter import StringVar
@@ -116,7 +115,15 @@ class ScriptRunner:
     def run_test(self):
         #run the tests
         for script in scripts_list:
-            print(script)
+            mydir = dt.now().strftime('%Y-%m-%d')
+            if not os.path.exists(mydir):   # Create directory if not already created
+                os.makedirs(mydir)
+            test_index = scripts_list.index(script) + 1
+            test_num = '/test' + str(test_index) + ".txt"
+            mycmd = os.path.join(script) + " >> " + mydir + test_num
+            print(mycmd)
+            os.system(mycmd)
+            #print(script)
 
     # Method to update text box
     def update_text_box(self):
