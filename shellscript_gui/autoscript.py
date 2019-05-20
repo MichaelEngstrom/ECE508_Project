@@ -130,9 +130,14 @@ class ScriptRunner:
             # Make index for naming output files to match test numbers
             test_index = scripts_list.index(script) + 1
             test_num = '/test' + str(test_index) + ".txt"
-            print(test_num)
-            mycmd = os.path.join(script) + " >> " + mydir + test_num
-            print(mycmd)
+
+            # Check os version: add & to end of command for linux
+            osname = str(os.name)
+            if osname == 'posix':
+                mycmd = os.path.join(script) + " >> " + mydir + test_num + " &"
+            else:
+                mycmd = os.path.join(script) + " >> " + mydir + test_num
+                
             # Call the script
             os.system(mycmd)
 

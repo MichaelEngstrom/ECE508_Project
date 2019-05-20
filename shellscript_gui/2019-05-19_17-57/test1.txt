@@ -1,0 +1,9 @@
+
+C:\Users\mengstr1\Documents\GitHub\ECE508_Project\shellscript_gui>echo Test file output 
+Test file output
+
+C:\Users\mengstr1\Documents\GitHub\ECE508_Project\shellscript_gui>echo More file output 
+More file output
+
+C:\Users\mengstr1\Documents\GitHub\ECE508_Project\shellscript_gui>echo Even more output 
+Even more output
