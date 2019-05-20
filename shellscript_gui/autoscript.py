@@ -7,7 +7,9 @@
     saved console output in file for each
     Count of scripts and remaining and number completed
 
-    Developed using Python 3.5"""
+    Developed using Python 3.5
+
+    Run as Super User on Linux (su + password)"""
 
 import tkinter as tk
 import os
