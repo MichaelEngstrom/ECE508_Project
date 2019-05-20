@@ -5,8 +5,7 @@
     Script paths saved one per line in list
     Read each path in list and execute scripts with
     saved console output in file for each
-    Nice to Have: count of scripts and remaining or
-    number completed
+    Count of scripts and remaining and number completed
 
     Developed using Python 3.5"""
 
@@ -62,7 +61,7 @@ class ScriptRunner:
 
         # Create and pack widgets for number of tests frame
         self.teststorun_label = tk.Label(self.numtests_frame, \
-                                         text='Tests to Run: ')
+                                         text='Tests Queued This Run: ')
         self.runcount = tk.StringVar()  # To update numtests_label
         self.numtests_label = tk.Label(self.numtests_frame, \
                                        textvariable=self.runcount)
@@ -71,7 +70,7 @@ class ScriptRunner:
 
         # Create and pack widgets for tests completed frame
         self.testcomp_label = tk.Label(self.comptests_frame, \
-                                       text='Tests Completed: ')
+                                       text='Tests Completed This Run: ')
         self.completed = tk.StringVar() # To update numcomp_label
         self.numcomp_label = tk.Label(self.comptests_frame, \
                                       textvariable=self.completed)
@@ -90,10 +89,10 @@ class ScriptRunner:
 
     # The add_test method is the callback function for the addtest_button widget
     def add_test(self):
-        # Use file dialog to add script path to list
-        files = filedialog.askopenfilenames(filetypes =(("Text File", "*.sh"),
+        # Use file dialog to add script path to list one at a time
+        files = filedialog.askopenfilename(filetypes =(("Shell Scripts", "*.sh"),
                                                         ("All Files","*.*")),
-                                            title = "Choose a shell script file.")
+                                            title = "Choose a script file.")
         if files:
             # Copy path to string and strip characters then append to path list
             temp = str(files)
@@ -105,26 +104,35 @@ class ScriptRunner:
             self.update_text_box()
 
 
-    # The remove test method pops the last test in the list and writes to text box
+    # The remove test method pops the last test in list, writes to text box
     def remove_test(self):
         if scripts_list:    #if not empty
             scripts_list.pop()
             self.update_text_box()
 
-    # The run_test method is the callback function for the runtest_button widget
+    # The run_test method is the callback function for runtest_button widget
     def run_test(self):
+        # Make unique folder for today's date
+        mydir = dt.now().strftime('%Y-%m-%d_%H-%M')
+        
+        # Create directory if not already created, handle exception if so
+        if not os.path.exists(mydir):
+            try:
+                os.makedirs(mydir)
+            except OSError as e:
+                if e.errno != errno.EEXIST:
+                    raise
+                pass
+        
         completed_count = 0
         #run the tests
         for script in scripts_list:
-            # Make unique folder for today's date
-            mydir = dt.now().strftime('%Y-%m-%d')
-            # Create directory if not already created
-            if not os.path.exists(mydir):
-                os.makedirs(mydir)
             # Make index for naming output files to match test numbers
             test_index = scripts_list.index(script) + 1
             test_num = '/test' + str(test_index) + ".txt"
+            print(test_num)
             mycmd = os.path.join(script) + " >> " + mydir + test_num
+            print(mycmd)
             # Call the script
             os.system(mycmd)
 
