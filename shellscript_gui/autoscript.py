@@ -14,6 +14,7 @@
 import tkinter as tk
 import os
 import subprocess
+import sys
 from tkinter import filedialog
 from tkinter import StringVar
 from datetime import datetime as dt
@@ -147,7 +148,7 @@ class ScriptRunner:
             myarg = ""
 
             try:
-                retcode = subprocess.check_call(mycmd + " myarg", shell=True)
+                retcode = subprocess.check_call(mycmd + " " + myarg, shell=True)
                 if retcode < 0:
                     print("Child terminated", -retcode, file=sys.stderr)
                 else:
