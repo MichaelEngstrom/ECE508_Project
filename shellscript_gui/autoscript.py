@@ -13,6 +13,7 @@
 
 import tkinter as tk
 import os
+import subprocess
 from tkinter import filedialog
 from tkinter import StringVar
 from datetime import datetime as dt
@@ -141,7 +142,18 @@ class ScriptRunner:
                 mycmd = os.path.join(script) + " >> " + mydir + test_num
                 
             # Call the script
-            os.system(mycmd)
+            #os.system(mycmd)
+
+            myarg = ""
+
+            try:
+                retcode = subprocess.check_call(mycmd + " myarg", shell=True)
+                if retcode < 0:
+                    print("Child terminated", -retcode, file=sys.stderr)
+                else:
+                    print("Child returned", retcode, file=sys.stderr)
+            except OSError as e:
+                print("Execution failed:", e, file=sys.stderr)
 
             # Update Completed Tests count
             completed_count += 1
