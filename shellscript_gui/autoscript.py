@@ -94,9 +94,11 @@ class ScriptRunner:
     # The add_test method is the callback function for the addtest_button widget
     def add_test(self):
         # Use file dialog to add script path to list one at a time
-        files = filedialog.askopenfilename(filetypes =(("Shell Scripts", "*.sh"),
-                                                        ("All Files","*.*")),
-                                            title = "Choose a script file.")
+        files = filedialog.askopenfilename(filetypes =(("All Files","*.*"),
+                                                       ("Shell Scripts", "*.sh"),
+                                                        ("Batch Files","*.bat"),
+                                                       ("Executables", "*.exe")),
+                                           title = "Choose a file.")
         if files:
             # Copy path to string and strip characters then append to path list
             temp = str(files)
@@ -144,15 +146,19 @@ class ScriptRunner:
                 
             # Call the script
             #os.system(mycmd)
+            #replacing with subprocess method
 
+            #TODO: add arguments to script calls
             myarg = ""
 
             try:
                 retcode = subprocess.check_call(mycmd + " " + myarg, shell=True)
                 if retcode < 0:
-                    print("Child terminated", -retcode, file=sys.stderr)
+                    print("Test " + script + " terminated with code", retcode)
+                    #print("Child terminated", -retcode, file=sys.stderr)
                 else:
-                    print("Child returned", retcode, file=sys.stderr)
+                    print("Test " + script + " completed with return code", retcode)
+                    #print("Child returned", retcode, file=sys.stderr)
             except OSError as e:
                 print("Execution failed:", e, file=sys.stderr)
 
